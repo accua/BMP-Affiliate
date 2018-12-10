@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_09_22_192407) do
+ActiveRecord::Schema.define(version: 2018_11_25_074155) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -21,6 +21,15 @@ ActiveRecord::Schema.define(version: 2018_09_22_192407) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "backpacks_items", force: :cascade do |t|
+    t.bigint "backpack_id"
+    t.bigint "item_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["backpack_id"], name: "index_backpacks_items_on_backpack_id"
+    t.index ["item_id"], name: "index_backpacks_items_on_item_id"
+  end
+
   create_table "items", force: :cascade do |t|
     t.string "url"
     t.datetime "created_at", null: false
@@ -28,9 +37,13 @@ ActiveRecord::Schema.define(version: 2018_09_22_192407) do
   end
 
   create_table "users", force: :cascade do |t|
-    t.string "name"
+    t.string "email"
+    t.string "password_digest"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["email"], name: "index_users_on_email", unique: true
   end
 
+  add_foreign_key "backpacks_items", "backpacks"
+  add_foreign_key "backpacks_items", "items"
 end
